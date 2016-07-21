@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>BluitRails</title>
+  <title>Bluit</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -11,8 +11,40 @@
 <div class="container wrap">
   <div class="row">
     <div class="col-xs-12">
+      <nav id="categories">
+        <div class="dropdown">
+          <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Categories
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <% categories.each do |category| %>
+              <li role="presentation">
+                <%= link_to category.name, category, role: 'menuitem', tabindex: "-1" %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        <ul class="category-list">
+          <% categories.each_with_index do |category, i| %>
+            <li>
+              <% if i > 0 %>
+                <span class="separator">-</span>
+              <% end %>
+              <%= link_to category.name, category %>
+            </li>
+          <% end %>
+        </ul>
+      </nav>
       <header>
-        <%= link_to "Bluit", posts_path %>
+        <%= link_to "Bluit", root_path %>
+        <div id="session_actions">
+          <% if user_signed_in? %>
+            <%= link_to 'logout', destroy_user_session_path, method: :delete %>
+          <% else %>
+            <%= link_to 'login', new_user_session_path %>
+          <% end %>
+        </div>
       </header>
     </div>
   </div>
@@ -20,16 +52,19 @@
     <div class="row">
       <div class="col-xs-8">
         <main>
-            <%= flash_messages flash %>
-            <!-- BEGIN main content -->
-            <%= yield %>
-            <!-- END main content -->
+          <%= flash_messages(flash) unless flash.empty? %>
+          <!-- BEGIN main content -->
+          <%= yield %>
+          <!-- END main content -->
         </main>
       </div>
       <div class="col-xs-4">
         <nav id="sidebar">
           <%= link_to "Submit a new link", new_post_path %>
           <%= link_to "Create your own subbluit", new_category_path %>
+          <div>
+            <%= yield :sidebar %>
+          </div>
         </nav>
       </div>
     </div>
@@ -38,7 +73,7 @@
 </div>
 
 <footer>
-  &copy; Super Original Productions, Inc.
+  Use of this site constitutes acceptance of the <a href="http://dresdenfiles.wikia.com/wiki/Unseelie_Accords">Unseelie Accords</a>.
 </footer>
 
 </body>

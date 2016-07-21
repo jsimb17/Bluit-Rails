@@ -1,6 +1,7 @@
 class CategoriesController < ApplicationController
   def show
     @category = Category.find(params[:id])
+    @posts = @category.posts.page(params[:page])
   end
 
   def new
@@ -12,7 +13,7 @@ class CategoriesController < ApplicationController
 
     respond_to do |format|
       if @category.save
-        format.html { redirect_to posts_path, flash: { :"alert-success" => "Thank you for adding a subbluit." } }
+        format.html { redirect_to posts_path, flash: { :"alert-success" => "Thank you for creating a category!" } }
         format.json { render :show, status: :created, location: @category }
       else
         flash.now[:"alert-danger"] = @category.errors.full_messages

@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module BluitRails
+module Bluit
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -26,7 +26,7 @@ module BluitRails
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
         origins '*'
-        resource '*', headers: :any, methods: [:get, :post, :put, :patch, :delete, :options]
+        resource '*', headers: :any, methods: [:get, :post, :options, :put, :patch, :delete]
       end
     end
   end

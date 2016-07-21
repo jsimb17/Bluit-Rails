@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    @posts = Post.paginate(page: params[:page])
   end
 
   # GET /posts/1
@@ -28,7 +28,7 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       if @post.save
-        format.html { redirect_to posts_path, flash: { :"alert-success" => "Post was successfully created." } }
+        format.html { redirect_to posts_path, flash: { :"alert-success" => "Thank you for posting!" } }
         format.json { render :show, status: :created, location: @post }
       else
         flash.now[:"alert-danger"] = @post.errors.full_messages
@@ -71,6 +71,6 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :link_url, :body, :category_id)
+      params.require(:post).permit(:title, :body, :link_url, :category_id)
     end
 end
